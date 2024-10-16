@@ -20,7 +20,7 @@ app.use(express.json());
 // corsを有効にする
 app.use(cors());
 
-//mysql接続情報
+//mysqlと接続するための設定
 const con = mysql.createConnection({
   host: "d6ybckq58s9ru745.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
   user: "rc4f2188n5qg27fc",
@@ -37,7 +37,7 @@ const jsonParser = bodyParser.json();
 const port = process.env.PORT || 5001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-app.get("/test", jsonParser, (req, res) => {
+app.get("/", jsonParser, (req, res) => {
   let sql = "SELECT 'SUCCESE!'AS A FROM DUAL";
   con.execute(sql, (err, result) => {
     // エラーが発生した場合はエラーメッセージを返す
@@ -45,6 +45,6 @@ app.get("/test", jsonParser, (req, res) => {
       return res.status(400).json({ error: err.message });
     }
     // エラーが発生しなかった場合はsql文で取得したデータを返す
-    console.log(result);
+    res.send(result[0].A);
   });
 });
